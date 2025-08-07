@@ -218,4 +218,10 @@ c. Handle error
                       </div>
                       )
             }
+    -- Done the early load for movies. 
+
+-- Next: Implement the search movies ---
+
+
+-- Done Search 
                 
