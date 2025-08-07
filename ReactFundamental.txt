@@ -1,0 +1,221 @@
+>>> Syntax <<
+0. Format:
+Highlight 
+Shift + Alt + F
+1. Everything in the React/Js like dynamic objects
+    - Initialize
+        const questionBanks = [
+            {
+                questions : "Who wrote 'To Kill a Mockingbird'?",
+                options: ["Harper Lee", "Mark Twain", "Ernest Hemingway", "F. Scott Fitzgerald"],
+                asswers: "Harper Lee"
+            }
+        ];
+    - Use:
+        <h1>Question 1</h1>
+        <p className='question'> {questionBanks[0].Questions} </p>
+        {questionBanks[0].options.map((option) => (
+            <p className="option">{option}</p>
+        ))}
+
+2. State Management: Where we are going to apply some js, and logic on the object. 
+    if any updates, we need to rerendering. 
+
+  - If we want to add any function:
+    Ex: Onclick 
+        const [selectedOption, setSelectedOption] = useState('None'); -- Like delegate - 1st is variable, and 2nd is function
+        // in the useState with initial value to pass to selectedOption
+        
+        function doAnyAction(option){
+            setSelectedOption(option);      
+        }
+      - In the button : <button onClick={()=>doAnyAction(anyParam)}>Click</button>
+      <p>Selected Option: {selectedOption}</p>
+
+3. Dynamic CSS with States. 
+    How we can coorordinate the States with CSS: 
+    Ex: 
+            <button className='option' onClick={()=> handleSelectOption(option)}>
+                {" "}
+                {option}
+                {" "}
+            </button>  
+        - In the index.css: we can see :
+        /* Option button styling */
+                    .option {
+                    
+                    text-align: left;
+                    transition: background 0.3s, border 0.3s;
+                    }
+
+                    .option:hover {
+                    background: #d6dde5;
+                    }
+
+                    .option.selected {
+                    background: #90caf9;
+                    border: 2px solid #42a5f5;
+                    }
+        - Final:
+        <button className={'option' + (selectedAnswer === option ? ' selected' : '') } 
+                onClick={()=> handleSelectOption(option)}>
+            {" "}
+            {option}
+            {" "}
+        </button> 
+
+4. Props: Passing data/function from parent to child. 
+Always thinks best scenarios when we try to do some effects with props. 
+    - From the parent: pass the data. 
+        return <Result userAnswers={userAnswers} questionBank={questionBank} restartQuiz={RestartQuiz}/>
+                userAnswers can be anything 
+                questionBank can be anything
+                restartQuiz is function
+    - From the Child: Ex: result.jsx
+        function Result({userAnswers, questionBank,restartQuiz})
+        <button className='restart-button' onClick={restartQuiz}>Restart Quiz</button>
+
+5. Each Component normally have:
+    - only one <div> </div>
+    - If we want to have multiple div, we can use fragment:
+        Ex:  return (
+                <>
+                <div>
+                <h1>Testing</h1>
+                </div>
+                <div>
+                <p1>Hello World</p1>
+                </div>
+                </>
+            ) 
+
+    - Conditional rendering:
+        { 
+         movieNumber === 1 &&
+        <MovieCard movie={{title: "LawnMan", release_date:"2024"}} />
+        }
+
+        equal to 
+         { 
+         movieNumber === 1 ? 
+        <MovieCard movie={{title: "LawnMan", release_date:"2024"}} /> : 
+        <MovieCard movie={{title: "BuMan", release_date:"2024"}} />
+        }
+
+6. Import 
+From the caller, if we use:
+ a. "./" : meant starting from the current directory level, go..
+ b. "../": Meant we start from src level. 
+
+7. Prevent search input to be erased each input. 
+ const handleSearch = (e) => {
+        e.preventDefault()   // it helps to maintain the seach value
+        alert(searchQuery);
+    };
+
+8. Page Routing
+- All pages stay in pages folder.
+- Install package: npm install react-router-dom
+- Configuration: 
+        + Go to main.jsx : 
+            import {BrowserRouter} from 'react-router-dom'
+               <BrowserRouter>
+                    <App />
+                </BrowserRouter> 
+- Implementation: 
+        + go to App.jsx:
+            import {Routes, Route} from 'react-router-dom'
+            import Favorites  from "./pages/Favorites"
+            <main className="main-content">
+                <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/favorites" element={<Favorites />} />
+                </Routes>
+            </main>
+<<< Make NavBar to display >>>>
+        + Make NavBar to back and forward page: 
+                - Make new component as NavBar.jsx 
+                    import {Link} from "react-router-dom"
+                    function NavBar(){
+                        return <nav className='navbar'>
+                            <div className='navbar-brand'>
+                                <Link to="/">Movie App</Link>
+                            </div>
+                            <div className='navbar-links'>
+                                <Link to="/" className="nav-link">Home</Link>
+                                <Link to="/favorites" className="nav-link">Favorites</Link>
+                            </div>
+                        </nav>
+                    }
+                    export default NavBar;
+                - Go To App.jsx:
+                    import NavBar from "./components/NavBar"
+
+                    function App() {
+                    return (
+                    <div>
+                        <NavBar/>
+                        <main className="main-content">
+                            <Routes>
+                            <Route path="/" element={<Home />} />
+                            <Route path="/favorites" element={<Favorites />} />
+                            </Routes>
+                        </main>
+                        </div>
+                    )
+                    }
+
+<<< Done NavBar >>>
+
+9. UseEffect: Allows to add side effects to our function or components and define when they should run.
+Better option => https://www.linkedin.com/posts/jayanti-goswami-6723a621b_%F0%9D%97%9F%F0%9D%97%BC%F0%9D%97%AE%F0%9D%97%B1%F0%9D%97%B2%F0%9D%97%BF%F0%9D%98%80-activity-7357246150485123072-JMUC/?utm_source=share&utm_medium=member_ios&rcm=ACoAACjOc-4B9dl0AzA9vzx8p1vzosJsf1coNYc
+Helps to get the data on the first rendering. 
+Use for Api fetch 
+
+Free Api Movies: https://www.themoviedb.org/
+username: luanthanhnguyen912@gmail.com
+Pw: Test@1234
+
+Steps:
+a. Make new folder - services. 
+    - Add api.js: inclue all the api call service. Ex: Export const get....
+    
+b. Implement UseEffect.
+    - We want the page load only once, when the page is load. If any function changes in the page, it will not rerender again. 
+    - useEffect(() => {// load 1st time},[])
+    - We always have 2 variables as One to store the "loading State", and other to store any potential errors.
+                    // useEffect
+                    const[movies, setMovies] = useState([]);
+                    const[error,setError] = useState(null);
+                    const[loading,setLoading] = useState(true);
+                    useEffect(() => {
+                        const loadPopularMovies = async () => {
+                            try{
+                                const popularMovies = await getPopularMovies();
+                                setMovies(popularMovies);
+                            }catch(err){
+                                console.log(err);
+                                setError("failed to load popularMovies");
+                            }finally{
+                                setLoading(false);
+                            }
+                        }
+                        loadPopularMovies()
+                    }, [])
+    => if we run, we should have data. 
+c. Handle error 
+    - In Home.jsx: we implementing 
+            {
+                error && <div className="error-message">{error}</div>
+            }
+            {loading ? 
+                     (<div className="loading">loading...</div>)
+                    :(<div className='movies-grid'>
+                        {movies.map((movie) => (
+                            movie.title.toLowerCase().startsWith(searchQuery)
+                            && <MovieCard movie={movie} key={movie.id} />
+                        ))}
+                      </div>
+                      )
+            }
+                
