@@ -221,7 +221,42 @@ c. Handle error
     -- Done the early load for movies. 
 
 -- Next: Implement the search movies ---
-
+const handleSearch = async (e) => {
+        e.preventDefault()
+        if(!searchQuery.trim()) return;
+        if(loading) return;
+        setLoading(true);
+        try{
+            const searchResults = await searchMovies(searchQuery);
+            setMovies(searchResults);
+            setError(null);
+        }catch(err){
+            console.log(err);
+            setError("failed to search movies");
+        }finally{
+            setLoading(false);
+        }
+    };
 
 -- Done Search 
-                
+
+
+10.LocalStorage - reactContext
+Sharing the State between different pages. 
+Context will allow state to be globally available to anything that's within the provided context.   
+Steps:
+a. Make folder context / MovieContext.jsx
+b. Implement the context
+    - In App.jsx: Wrap entire content with  <MovieProvider>  </MovieProvider>  
+    - In MovieCard.jsx:
+                const { addToFavorites,
+                    removeFromFavorites,
+                    isFavorite } = useMovieContext();
+            const favorite =  isFavorite(movie.id);   
+            function onFavoriteClick(e){
+                e.preventDefault();
+                if(favorite) removeFromFavorites(movie.id);
+                else addToFavorites(movie);
+            }
+            // then add the class effect by ternary with className in the heart icon. 
+    - In Favorites.jsx => make changes as recommended.
